@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>ToDo</title>
+
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        class TaskComponent extends React.Component{
+            constructor(props){
+                super(props)
+                this.state = {
+                    input :  "",
+                    // complete : false
+                }
+            }
+            render(){
+                const tasks = this.props.tasks.map((task,i) => {
+                    // console.log({task})
+                    // <button data-index = {i} onClick = {this.taskDone}>Done</button>
+                    // <input type="checkbox" value="checkbox" onClick = {this.taskDone} />
+                    return (
+                        <div>
+                            <li style={{textDecoration : task.complete ? "line-through" : ""}}key = {i}>{task.name} {i} &nbsp;
+                                <button data-index = {i} onClick = {this.taskDone}>Done</button> &nbsp;
+                                <button data-index = {i} onClick = {this.deleteTask}>Delete</button>
+                            </li>
+                            <br/>
+                        </div>
+                    );
+                })
+                return (
+                    <div>
+                        <ul>{tasks}</ul>
+                        <input name = "task" onChange={this.handleChange} value = {this.state.input}/>
+                        <button onClick = {this.addTask}>Add Task</button>
+                    </div>
+                );
+            }
+            addTask = () =>{
+                this.props.addTask(this.state.input);
+                this.setState({
+                        input: ""
+                    });
+            }
+
+            handleChange = (event) => {
+                this.setState({
+                    // [event.target.name] : event.target.value
+                    input : event.target.value,
+                });
+            }
+            deleteTask = (event) => {
+                    this.props.deleteTask(event.target.dataset.index);
+                }
+
+            taskDone = (event) => {
+                this.props.taskDone(event.target.dataset.index);
+                console.log(event.target.dataset.index)
+                // const ele = event.target;
+                // ele.classList.toggle('crossed-line')
+            }
+        }
+
+        class App extends React.Component
+        {
+            constructor(props){
+                super(props)
+                this.state = {
+                    // tasks : ["first","second","third"]
+                    // tasks : [{name : "first"},{name :"second"},{name : "third"}]
+                    tasks : [],
+                };
+            }
+            // setTasks = tasks => this.setState({tasks})
+            render(){
+                return(
+                    <div>
+                        <h1>ToDo List</h1>
+                        <TaskComponent tasks = {this.state.tasks} addTask={this.addTask} deleteTask = {this.deleteTask} taskDone = {this.taskDone}/>
+                    </div>
+                )
+            }
+            addTask = (name) => {
+                // complete : false
+                this.setState(state => ({
+                      tasks  : [...state.tasks,{name}],
+                    }));
+            }
+
+            deleteTask = (index) => {
+                    this.setState(state => {
+                        const tasks = [...state.tasks];
+                        tasks.splice(index, 1);
+                        return { tasks };
+                    });
+                }
+
+            taskDone = (index) => {
+                this.setState(state => {
+                    const tasks = [...state.tasks];
+                    tasks[index].complete = !tasks[index].complete
+                    return {tasks}
+                });
+            }
+
+        }
+
+    ReactDOM.render(<App />, document.querySelector("#app"));
+    </script>
+</body>
+</html>
