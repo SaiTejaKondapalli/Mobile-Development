@@ -5,7 +5,8 @@ import {
   Text,
   Button,
   ScrollView,
-  TouchableHighlight,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import Constants from 'expo-constants';
 import DatePicker from 'react-native-datepicker';
@@ -15,45 +16,46 @@ class TaskComponent extends React.Component {
     super(props);
     this.state = {
       value: '',
-      date: ''
-      // complete : false
+      date: '',
     };
   }
   render() {
     const tasks = this.props.tasks.map((task, i) => {
       return (
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
-          <Text
+        <View>
+          <View>
+            <Text
+              style={{
+                backgroundColor: task.complete ? 'green' : '',
+                textDecorationStyle: 'solid',
+                padding: 10,
+                textAlign: 'center',
+              }}>
+              {task.name}
+            </Text>
+            <Text style={{ padding: 10, textAlign: 'center' }}>
+              {task.date}
+            </Text>
+          </View>
+          <View
             style={{
-              backgroundColor: task.complete ? 'green' : '',
-              textDecorationStyle: 'solid',
+              flexDirection: 'row',
+              alignItems: 'center',
               padding: 10,
+              paddingLeft: 70,
             }}>
-            {task.name}
-          </Text>
-          <Text style={{ padding: 10}}>{task.date}</Text>
-          <TouchableHighlight
-            style={{
-              backgroundColor: 'grey',
-              width: 100,
-              height: 40,
-              alignItems: 'center',
-              padding: 10,
-            }}
-            onPress={() => this.taskDone(i)}>
-            <Text>Done</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={{
-              backgroundColor: 'grey',
-              width: 100,
-              height: 40,
-              alignItems: 'center',
-              padding: 10,
-            }}
-            onPress={() => this.deleteTask(i)}>
-            <Text>Delete</Text>
-          </TouchableHighlight>
+            <TouchableOpacity
+              style={styles.buttonstyle}
+              onPress={() => this.taskDone(i)}>
+              <Text>Done</Text>
+            </TouchableOpacity>
+            <Text> </Text>
+            <TouchableOpacity
+              style={styles.buttonstyle}
+              onPress={() => this.deleteTask(i)}>
+              <Text>Delete</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     });
@@ -68,7 +70,7 @@ class TaskComponent extends React.Component {
             value={this.state.value}
           />
           <DatePicker
-            style={{ width: 200, marginLeft: 75 }}
+            style={{ width: 200, marginLeft: 100, padding: 10 }}
             minDate={new Date()}
             format="MMMM D, YYYY"
             date={this.state.date}
@@ -87,13 +89,6 @@ class TaskComponent extends React.Component {
       </View>
     );
   }
-  // addTask = () => {
-  //   this.props.addTask(this.state.value);
-  //   this.setState({
-  //     value: '',
-  //     date : ''
-  //   });
-  // };
 
   deleteTask = i => {
     this.props.deleteTask(i);
@@ -116,7 +111,7 @@ class TaskComponent extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.addTask(this.state.value, this.state.date);
+    this.props.addTask(this.state.value, this.state.date, false);
     this.setState({
       value: '',
       date: '',
@@ -129,12 +124,13 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       tasks: [],
+      complete: false,
     };
   }
   render() {
     return (
       <View style={{ marginTop: Constants.statusBarHeight, flex: 1 }}>
-        <Text style={{ fontSize: 20, marginLeft: 125, color: 'red' }}>
+        <Text style={{ fontSize: 20, textAlign: 'center', color: 'red' }}>
           ToDo List
         </Text>
         <TaskComponent
@@ -169,3 +165,12 @@ export default class App extends React.Component {
     });
   };
 }
+const styles = StyleSheet.create({
+  buttonstyle: {
+    backgroundColor: 'grey',
+    width: 100,
+    height: 40,
+    alignItems: 'center',
+    padding: 10,
+  },
+});
