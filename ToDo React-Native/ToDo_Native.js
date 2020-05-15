@@ -30,10 +30,11 @@ class TaskComponent extends React.Component {
                 textDecorationStyle: 'solid',
                 padding: 10,
                 textAlign: 'center',
+                color : "white"
               }}>
               {task.name}
             </Text>
-            <Text style={{ padding: 10, textAlign: 'center' }}>
+            <Text style={{ padding: 10, textAlign: 'center',color:"white" }}>
               {task.date}
             </Text>
           </View>
@@ -64,13 +65,13 @@ class TaskComponent extends React.Component {
         <ScrollView>
           {tasks}
           <TextInput
-            style={{ borderColor: 'gray', borderWidth: 1 }}
+            style={{ borderColor: 'gray', borderWidth: 1,color:"white" }}
             onChangeText={this.handleChange}
             placeholder="Enter a task"
             value={this.state.value}
           />
           <DatePicker
-            style={{ width: 200, marginLeft: 100, padding: 10 }}
+            style={{ width: 200, marginLeft: 100, padding: 10}}
             minDate={new Date()}
             format="MMMM D, YYYY"
             date={this.state.date}
@@ -80,8 +81,11 @@ class TaskComponent extends React.Component {
             customStyles={{
               placeholderText: {
                 fontSize: 15,
-                color: '#234456',
+                color: "white",
               },
+              dateText:{
+                color : "white"
+              }
             }}
           />
           <Button title="Add Task" onPress={this.handleSubmit} />
@@ -129,8 +133,8 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <View style={{ marginTop: Constants.statusBarHeight, flex: 1 }}>
-        <Text style={{ fontSize: 20, textAlign: 'center', color: 'red' }}>
+      <View style={{ marginTop: Constants.statusBarHeight, flex: 1, backgroundColor:"black" }}>
+        <Text style={{ fontSize: 30, textAlign: 'center', color: 'red', fontWeight :"bold", paddingTop : 20 }}>
           ToDo List
         </Text>
         <TaskComponent
